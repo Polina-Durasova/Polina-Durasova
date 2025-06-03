@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Последние новости</h1>
+    {% for news_item in news %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ news_item.title }}</h5>
+            <p class="card-text">{{ news_item.content }}</p>
+            <p class="card-text">
+                <small class="text-muted">
+                    Опубликовано {{ news_item.timestamp.strftime('%d.%m.%Y %H:%M') }} 
+                    пользователем {{ news_item.author.first_name }} {{ news_item.author.last_name }}
+                </small>
+            </p>
+            {% if current_user == news_item.author %}
+            <div>
+                <a href="{{ url_for('edit_news', id=news_item.id) }}" class="btn btn-primary btn-sm">Редактировать</a>
+                <form action="{{ url_for('delete_news', id=news_item.id) }}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}
